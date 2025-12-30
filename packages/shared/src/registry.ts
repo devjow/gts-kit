@@ -137,6 +137,17 @@ export class JsonRegistry {
     // Check if all GTS references exist in the registry
     if (entity.gtsRefs && entity.gtsRefs.length > 0) {
       for (const ref of entity.gtsRefs) {
+        // Skip reference validation for refs inside /examples field in schemas
+        // Match 'examples' at root or after array indices (e.g., allOf[0].examples), but NOT after 'properties'
+        // Valid: 'examples', 'examples[0]', 'allOf[0].examples', 'anyOf[1].examples[0]'
+        // Invalid: 'properties.examples' (this is a regular schema property, not documentation examples)
+        const isInExamples = /(?:^|(?:allOf|anyOf|oneOf)\[\d+\]\.)examples(?:\[|$|\.)/.test(ref.sourcePath) ||
+                            /^examples(?:\[|$|\.)/.test(ref.sourcePath)
+        
+        if (isInExamples) {
+          continue
+        }
+        
         const refExists = this.jsonSchemas.has(ref.id) || this.jsonObjs.has(ref.id)
         if (!refExists) {
           this.absentGtsEntities.set(ref.id, createAbsentEntity(ref.id))
