@@ -29,5 +29,38 @@
         }
       }
     }
+  ],
+  "examples": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440100",
+      "type": "gts.x.core.events.type.v1~x.commerce.orders.order_placed.v1.0~",
+      "$schema": "gts://gts.x.core.events.type.v1~x.commerce.orders.order_placed.v1.0~",
+      "tenantId": "770e8400-e29b-41d4-a716-446655440001",
+      "userId": "880e8400-e29b-41d4-a716-446655440002",
+      "source": "order-service/v1.2.3",
+      "occurredAt": "2024-01-15T10:30:00Z",
+      "sequenceNumber": 12345,
+      "subject": "550e8400-e29b-41d4-a716-446655440000",
+      "subjectType": "gts://gts.x.commerce.orders.order.v1.0~",
+      "payload": {
+        "orderId": "550e8400-e29b-41d4-a716-446655440000",
+        "customerId": "660e8400-e29b-41d4-a716-446655440001",
+        "totalAmount": 159.47,
+        "items": [
+          {
+            "productId": "880e8400-e29b-41d4-a716-446655440011",
+            "productName": "Wireless Mouse",
+            "quantity": 2,
+            "unitPrice": 29.99
+          },
+          {
+            "productId": "880e8400-e29b-41d4-a716-446655440013",
+            "productName": "USB-C Cable",
+            "quantity": 3,
+            "unitPrice": 19.99
+          }
+        ]
+      }
+    }
   ]
 }

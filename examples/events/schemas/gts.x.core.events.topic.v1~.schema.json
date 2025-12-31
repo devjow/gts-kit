@@ -71,5 +71,42 @@
     },
     "tags": { "type": "array", "items": { "type": "string" } }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "examples": [
+    {
+      "id": "gts://gts.x.core.events.topic.v1~x.core.commerce.orders.v1~",
+      "$schema": "gts://gts.x.core.events.topic.v1~",
+      "name": "Orders Topic",
+      "description": "Stream for all order-related events",
+      "retention": "P90D",
+      "ordering": "by-partition-key",
+      "partitions": 16,
+      "partitionKeyPath": "/payload/orderId",
+      "dedup": {
+        "strategy": "by-key",
+        "keyPaths": ["/id"]
+      },
+      "storage": {
+        "kind": "db",
+        "config": {
+          "table": "events_orders"
+        }
+      },
+      "tags": ["commerce", "orders"]
+    },
+    {
+      "id": "gts://gts.x.core.events.topic.v1~x.core.idp.contacts.v1~",
+      "$schema": "gts://gts.x.core.events.topic.v1~",
+      "name": "Contacts Topic",
+      "description": "Stream for contact lifecycle events",
+      "retention": "P365D",
+      "ordering": "global",
+      "dedup": {
+        "strategy": "time-window",
+        "window": "PT5M",
+        "keyPaths": ["/id", "/type"]
+      },
+      "tags": ["idp", "contacts"]
+    }
+  ]
 }

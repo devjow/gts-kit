@@ -529,8 +529,9 @@ export const SchemaDiagram = forwardRef<SchemaDiagramHandle, SchemaDiagramProps>
       const expanded = !!sn.expansion?.expanded
       const sections = sn.expansion?.sections || {}
       const rawView = (sn.extra?.rawView as boolean | undefined) ?? model.rawView
+      const showExamples = (sn.extra?.showExamples as boolean | undefined) ?? model.showExamples
 
-      model.initLayout({ x: sn.position.x, y: sn.position.y }, expanded, rawView ?? false, sections)
+      model.initLayout({ x: sn.position.x, y: sn.position.y }, expanded, rawView ?? false, sections, showExamples)
 
       return {
         ...n,

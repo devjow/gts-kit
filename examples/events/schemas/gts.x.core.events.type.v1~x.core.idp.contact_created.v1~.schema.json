@@ -34,5 +34,27 @@
         "topicRef": { "const": "gts.x.core.events.topic.v1~x.core.idp.contacts.v1" }
       }
     }
+  ],
+  "examples": [
+    {
+      "id": "660e8400-e29b-41d4-a716-446655440200",
+      "type": "gts.x.core.events.type.v1~x.core.idp.contact_created.v1.0~",
+      "$schema": "gts://gts.x.core.events.type.v1~x.core.idp.contact_created.v1.0~",
+      "tenantId": "770e8400-e29b-41d4-a716-446655440001",
+      "clientId": "990e8400-e29b-41d4-a716-446655440004",
+      "source": "idp-service/v2.0.1",
+      "occurredAt": "2024-01-15T11:00:00Z",
+      "ingestedAt": "2024-01-15T11:00:01Z",
+      "sequenceNumber": 67890,
+      "previousSequenceNumber": 67889,
+      "subject": "550e8400-e29b-41d4-a716-446655440000",
+      "subjectType": "gts://gts.x.core.idp.contact.v1.0~",
+      "payload": {
+        "userId": "550e8400-e29b-41d4-a716-446655440000",
+        "email": "john.doe@example.com",
+        "name": "John Doe",
+        "roles": ["user", "customer"]
+      }
+    }
   ]
 }
