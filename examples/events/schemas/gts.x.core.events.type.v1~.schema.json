@@ -86,5 +86,44 @@
       "$comment": "The value is mandatory if subject is present"
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "examples": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "type": "gts://gts.x.core.events.type.v1~x.commerce.orders.order_placed.v1~",
+      "$schema": "gts://gts.x.core.events.type.v1~x.commerce.orders.order_placed.v1~",
+      "tenantId": "770e8400-e29b-41d4-a716-446655440001",
+      "userId": "880e8400-e29b-41d4-a716-446655440002",
+      "source": "order-service/v1.2.3",
+      "occurredAt": "2024-01-15T10:30:00Z",
+      "sequenceNumber": 12345,
+      "subject": "order-123",
+      "subjectType": "gts://gts.x.commerce.orders.order.v1.0~",
+      "payload": {
+        "orderId": "order-123",
+        "customerId": "customer-456",
+        "totalAmount": 99.99,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "660e8400-e29b-41d4-a716-446655440003",
+      "type": "gts://gts.x.core.events.type.v1~x.core.idp.contact_created.v1~",
+      "$schema": "gts://gts.x.core.events.type.v1~x.core.idp.contact_created.v1~",
+      "tenantId": "770e8400-e29b-41d4-a716-446655440001",
+      "clientId": "990e8400-e29b-41d4-a716-446655440004",
+      "source": "idp-service/v2.0.1",
+      "occurredAt": "2024-01-15T11:00:00Z",
+      "ingestedAt": "2024-01-15T11:00:01Z",
+      "sequenceNumber": 67890,
+      "previousSequenceNumber": 67889,
+      "subject": "contact-789",
+      "subjectType": "gts://gts.x.core.idp.contact.v1.0~",
+      "payload": {
+        "contactId": "contact-789",
+        "email": "new.user@example.com",
+        "name": "New User"
+      }
+    }
+  ]
 }

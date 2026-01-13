@@ -260,5 +260,78 @@
       },
       "required": ["firstName", "lastName", "addressLine1", "city", "state", "postalCode", "country"]
     }
-  }
+  },
+  "examples": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "orderNumber": "ORD-2024-001234",
+      "status": "confirmed",
+      "customerId": "660e8400-e29b-41d4-a716-446655440001",
+      "customerEmail": "john.doe@example.com",
+      "subtotal": 149.97,
+      "taxAmount": 14.50,
+      "discountAmount": 15.00,
+      "totalAmount": 159.47,
+      "currency": "USD",
+      "items": [
+        {
+          "id": "770e8400-e29b-41d4-a716-446655440010",
+          "productId": "880e8400-e29b-41d4-a716-446655440011",
+          "productName": "Wireless Mouse",
+          "productSku": "WM-2024-BLK",
+          "quantity": 2,
+          "unitPrice": 29.99,
+          "totalPrice": 59.98,
+          "discountAmount": 0,
+          "taxAmount": 5.80
+        },
+        {
+          "id": "770e8400-e29b-41d4-a716-446655440012",
+          "productId": "880e8400-e29b-41d4-a716-446655440013",
+          "productName": "USB-C Cable",
+          "productSku": "USBC-2M-WHT",
+          "quantity": 3,
+          "unitPrice": 19.99,
+          "totalPrice": 59.97,
+          "discountAmount": 5.00,
+          "taxAmount": 5.30,
+          "metadata": {
+            "length": "2m",
+            "color": "white"
+          }
+        }
+      ],
+      "shippingAddress": {
+        "id": "990e8400-e29b-41d4-a716-446655440020",
+        "firstName": "John",
+        "lastName": "Doe",
+        "addressLine1": "123 Main Street",
+        "addressLine2": "Apt 4B",
+        "city": "New York",
+        "state": "NY",
+        "postalCode": "10001",
+        "country": "US",
+        "phone": "+1-555-123-4567"
+      },
+      "billingAddress": {
+        "id": "990e8400-e29b-41d4-a716-446655440021",
+        "firstName": "John",
+        "lastName": "Doe",
+        "addressLine1": "123 Main Street",
+        "city": "New York",
+        "state": "NY",
+        "postalCode": "10001",
+        "country": "US",
+        "phone": "+1-555-123-4567"
+      },
+      "shippingMethod": "standard",
+      "shippingCost": 10.00,
+      "paymentMethod": "credit_card",
+      "paymentStatus": "completed",
+      "paymentReference": "ch_1234567890abcdef",
+      "tags": ["priority", "new-customer"],
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T10:35:00Z"
+    }
+  ]
 }

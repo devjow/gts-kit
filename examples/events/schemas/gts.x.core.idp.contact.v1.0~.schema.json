@@ -12,5 +12,25 @@
         "additionalProperties": true,
         "description": "Custom properties that can be inherited by specialized contact"
     }
-  }
+  },
+  "examples": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "email": "john.doe@example.com",
+      "name": "John Doe",
+      "custom_properties": {
+        "company": "Acme Corp",
+        "role": "Developer"
+      }
+    },
+    {
+      "id": "660e8400-e29b-41d4-a716-446655440001",
+      "email": "jane.smith@example.com",
+      "name": "Jane Smith",
+      "custom_properties": {
+        "department": "Marketing",
+        "level": "Senior"
+      }
+    }
+  ]
 }

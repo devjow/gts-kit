@@ -11,8 +11,10 @@ export class SchemaNodeModel {
   position: Position
   expanded: boolean
   rawView: boolean
+  showExamples: boolean
   sections: Record<string, boolean>
   properties?: any[]
+  examplesProperties?: any[]
   edges: SchemaEdgeModel[]
   isMaximized: boolean
   snapshotChecked: boolean
@@ -20,6 +22,7 @@ export class SchemaNodeModel {
   // Dirtiness detection
   origExpanded: boolean
   origRawView: boolean
+  origShowExamples: boolean
   origPosition: Position
   origSections: Record<string, boolean>
 
@@ -28,6 +31,7 @@ export class SchemaNodeModel {
     position?: Position
     expanded?: boolean
     rawView?: boolean
+    showExamples?: boolean
     sections?: Record<string, boolean>
     isMaximized?: boolean
   }) {
@@ -36,6 +40,7 @@ export class SchemaNodeModel {
     this.position = params.position ? { x: params.position.x, y: params.position.y } : { x: 0, y: 0 }
     this.expanded = params.expanded ?? true
     this.rawView = params.rawView ?? false
+    this.showExamples = params.showExamples ?? false
     this.sections = params.sections || {}
     this.edges = []
     this.isMaximized = params.isMaximized ?? false
@@ -43,25 +48,40 @@ export class SchemaNodeModel {
     this.properties = params.entity.isSchema
       ? parseSchemaToProperties(params.entity.content)
       : parseJsonToProperties(params.entity.content)
+    
+    // Extract examples from schema if available
+    if (params.entity.isSchema && params.entity.content?.examples) {
+      const examples = params.entity.content.examples
+      if (Array.isArray(examples) && examples.length > 0) {
+        this.examplesProperties = examples.map((example: any, index: number) => ({
+          name: `Example ${index + 1}`,
+          type: 'object',
+          children: parseJsonToProperties(example, `example-${index}`)
+        }))
+      }
+    }
 
     // Dirtiness calculation assistance
     this.origExpanded = params.expanded ?? true
     this.origRawView = params.rawView ?? false
+    this.origShowExamples = params.showExamples ?? false
     this.origPosition = params.position ? { x: params.position.x, y: params.position.y } : { x: 0, y: 0 }
     this.origSections = params.sections || {}
     debug.node("constructor node {" + this.entity.id + "} constructor", this.position.x, this.position.y, "orig:", this.origPosition.x, this.origPosition.y)
   }
 
   // apply layout from diagram storage
-  initLayout(position: Position, expanded: boolean, rawView: boolean, sections: Record<string, boolean>) {
+  initLayout(position: Position, expanded: boolean, rawView: boolean, sections: Record<string, boolean>, showExamples?: boolean) {
     // clone to avoid shared references
     this.position = { x: position.x, y: position.y }
     this.expanded = expanded
     this.rawView = rawView
+    this.showExamples = showExamples ?? false
     this.sections = { ...sections }
     this.snapshotChecked = true
     this.origExpanded = expanded
     this.origRawView = rawView
+    this.origShowExamples = showExamples ?? false
     this.origPosition = { x: position.x, y: position.y }
     this.origSections = { ...sections }
     debug.node("initLayout node {" + this.entity.id + "} applyLayoutFromSnapshot", position.x, position.y, "orig:", this.origPosition.x, this.origPosition.y)
@@ -76,6 +96,7 @@ export class SchemaNodeModel {
 
   isDirty(): boolean {
     if (this.rawView !== this.origRawView) return true
+    if (this.showExamples !== this.origShowExamples) return true
     if (this.position.x !== this.origPosition.x || this.position.y !== this.origPosition.y) return true
     if (this.expanded !== this.origExpanded) return true
 
@@ -103,6 +124,7 @@ export class SchemaNodeModel {
   resetDirtyBaseline() {
     this.origExpanded = this.expanded
     this.origRawView = this.rawView
+    this.origShowExamples = this.showExamples
     this.origPosition = { x: this.position.x, y: this.position.y }
     this.origSections = { ...this.sections }
     debug.node("resetDirtyBaseline node {" + this.entity.id + "} resetDirtyBaseline", this.origRawView, this.origPosition.x, this.origPosition.y, this.origSections)
@@ -120,7 +142,7 @@ export class SchemaNodeModel {
         expanded: this.expanded,
         sections: this.sections,
       },
-      extra: { rawView: this.rawView },
+      extra: { rawView: this.rawView, showExamples: this.showExamples },
     }
   }
 }

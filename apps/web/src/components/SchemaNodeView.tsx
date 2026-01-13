@@ -1,7 +1,7 @@
 import { Component, createRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Handle, Position, type NodeProps } from 'reactflow'
-import { ChevronDown, ChevronUp, CheckCircle, AlertCircle, Code2, List, X } from 'lucide-react'
+import { ChevronDown, ChevronUp, CheckCircle, AlertCircle, Code2, List, X, FileJson } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { PropertyViewer } from './PropertyViewer'
@@ -125,10 +125,16 @@ export class SchemaNodeView extends Component<NodeProps<any>, {}> {
         const next = !diagramRegistry.getViewState().globalRawViewPreference
         this.onMaximizeRawJson?.(next)
     } else {
-        // notify diagram (e.g., to mark dirty)
         const next = !this.model.rawView
         this.model.rawView = next
     }
+    this.onNodeChange?.()
+    this.forceUpdate()
+  }
+
+  private handleToggleShowExamples = () => {
+    const next = !this.model.showExamples
+    this.model.showExamples = next
     this.onNodeChange?.()
     this.forceUpdate()
   }
@@ -444,15 +450,28 @@ export class SchemaNodeView extends Component<NodeProps<any>, {}> {
                     </Popup>
                   )}
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 px-2 bg-gray-200"
-                  onClick={this.handleToggleRawView}
-                  title={rawView ? 'Switch to formatted view' : 'Switch to raw JSON'}
-                >
-                  {rawView ? <List className="h-3.5 w-3.5" /> : <Code2 className="h-3.5 w-3.5" />}
-                </Button>
+                <div className="flex gap-1">
+                  {this.model?.examplesProperties && this.model.examplesProperties.length > 0 && !rawView && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 px-2 bg-gray-200"
+                      onClick={this.handleToggleShowExamples}
+                      title={this.model.showExamples ? 'Show schema' : 'Show examples'}
+                    >
+                      <FileJson className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 px-2 bg-gray-200"
+                    onClick={this.handleToggleRawView}
+                    title={rawView ? 'Switch to formatted view' : 'Switch to raw JSON'}
+                  >
+                    {rawView ? <List className="h-3.5 w-3.5" /> : <Code2 className="h-3.5 w-3.5" />}
+                  </Button>
+                </div>
               </div>
             )}
             {(this.model?.entity?.validation || d.entity?.validation) && (this.model?.entity?.validation || d.entity?.validation).errors.length > 0 && (
@@ -473,7 +492,7 @@ export class SchemaNodeView extends Component<NodeProps<any>, {}> {
                 {this.renderCodeWithErrors(JSON.stringify((this.model?.entity?.content ?? d.entity?.content), null, 2))}
               </div>
             ) : (
-              this.model?.properties && (
+              (this.model?.showExamples && this.model?.examplesProperties ? this.model.examplesProperties : this.model?.properties) && (
                 <div
                   className="max-h-96 overflow-y-auto overflow-x-hidden pr-2"
                   onWheel={(e) => {
@@ -495,7 +514,7 @@ export class SchemaNodeView extends Component<NodeProps<any>, {}> {
                   }}
                 >
                   <PropertyViewer
-                    properties={this.model.properties}
+                    properties={(this.model.showExamples && this.model.examplesProperties ? this.model.examplesProperties : this.model.properties) || []}
                     sectionStates={sectionStates}
                     onToggleSection={this.handleToggleSection}
                     validationErrors={this.model?.entity?.validation?.errors}
@@ -552,15 +571,28 @@ export class SchemaNodeView extends Component<NodeProps<any>, {}> {
                     ) : (
                       <span className="truncate cursor-default overflow-hidden">{this.model?.entity?.file?.name}</span>
                     )}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 px-2 bg-gray-200"
-                      onClick={(e) => { e.stopPropagation(); this.handleToggleRawView() }}
-                      title={(this.model?.rawView ? true : false) ? 'Switch to formatted view' : 'Switch to raw JSON'}
-                    >
-                      {(this.model?.rawView ? true : false) ? <List className="h-3.5 w-3.5" /> : <Code2 className="h-3.5 w-3.5" />}
-                    </Button>
+                    <div className="flex gap-1">
+                      {this.model?.examplesProperties && this.model.examplesProperties.length > 0 && !rawView && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 px-2 bg-gray-200"
+                          onClick={(e) => { e.stopPropagation(); this.handleToggleShowExamples() }}
+                          title={this.model.showExamples ? 'Show schema' : 'Show examples'}
+                        >
+                          <FileJson className="h-3.5 w-3.5" />
+                        </Button>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 px-2 bg-gray-200"
+                        onClick={(e) => { e.stopPropagation(); this.handleToggleRawView() }}
+                        title={(this.model?.rawView ? true : false) ? 'Switch to formatted view' : 'Switch to raw JSON'}
+                      >
+                        {(this.model?.rawView ? true : false) ? <List className="h-3.5 w-3.5" /> : <Code2 className="h-3.5 w-3.5" />}
+                      </Button>
+                    </div>
                   </div>
                 )}
                 {this.model?.entity?.validation && this.model.entity.validation.errors.length > 0 && (
@@ -581,10 +613,10 @@ export class SchemaNodeView extends Component<NodeProps<any>, {}> {
                     {this.renderCodeWithErrors(JSON.stringify(this.model?.entity?.content, null, 2))}
                   </div>
                 ) : (
-                  this.model?.properties && (
+                  (this.model?.showExamples && this.model?.examplesProperties ? this.model.examplesProperties : this.model?.properties) && (
                     <div className="h-[calc(100%-2rem)] overflow-y-auto overflow-x-hidden pr-2">
                       <PropertyViewer
-                        properties={this.model.properties}
+                        properties={(this.model.showExamples && this.model.examplesProperties ? this.model.examplesProperties : this.model.properties) || []}
                         sectionStates={this.model.sections}
                         onToggleSection={this.handleToggleSection}
                         validationErrors={this.model?.entity?.validation?.errors}

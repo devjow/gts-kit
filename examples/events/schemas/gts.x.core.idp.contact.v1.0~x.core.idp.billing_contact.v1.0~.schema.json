@@ -20,5 +20,19 @@
         }
       }
     }
+  ],
+  "examples": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "email": "billing@example.com",
+      "name": "John Doe - Billing",
+      "custom_properties": {
+        "phone_number": "+1-555-123-4567",
+        "address": "123 Main Street, New York, NY 10001",
+        "currency": "USD",
+        "billing_enabled": true,
+        "payment_terms": "net30"
+      }
+    }
   ]
 }
